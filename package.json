@@ -1,0 +1,63 @@
+{
+  "name": "typescript-server-boilerplate",
+  "version": "1.0.0",
+  "description": "Boiler plate repository to quickly start new projects using a typescript backend.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest --collectiveCoverage",
+    "dev": "concurrently \"tsc -w\" \"nodemon -w .env -r dotenv/config target/index.js\"",
+    "clean": "rimraf target",
+    "build": "tsc",
+    "postbuild": "copyfiles -E package.json package-lock.json target"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jberks02/typescript-react-server-boilerplate.git"
+  },
+  "keywords": [
+    "boiler",
+    "plate"
+  ],
+  "author": "Justin Berkshire",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jberks02/typescript-react-server-boilerplate/issues"
+  },
+  "homepage": "https://github.com/jberks02/typescript-react-server-boilerplate#readme",
+  "dependencies": {
+    "concurrently": "^7.0.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "kea": "^2.5.8",
+    "node-fetch": "^3.2.1",
+    "npm-run-all": "^4.1.5",
+    "reselect": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/html-escaper": "^3.0.0",
+    "@types/jest": "^27.4.1",
+    "@types/mssql": "^7.1.5",
+    "@types/swagger-jsdoc": "^6.0.1",
+    "@types/swagger-ui-express": "^4.1.3",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "copyfiles": "^2.4.1",
+    "css-loader": "^6.7.0",
+    "eslint": "^8.10.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "resetMocks": true
+  }
+}

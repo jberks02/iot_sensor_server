@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "CommonJS", 
+        "outDir": "./target", 
+        "rootDirs": [
+            "./src"
+        ], 
+        "typeRoots": [
+            "./node_modules/@types", 
+            "./src/types"
+        ], 
+        "types": [
+            "jest", 
+            "node"
+        ], 
+        "noImplicitAny": true,
+        "declaration": true, 
+        "esModuleInterop": true, 
+        "resolveJsonModule": true, 
+        "noErrorTruncation": true
+    }, 
+    "exclude": [
+        "toolbox", 
+        "target", 
+        "__mocks__", 
+        "src/**/*.tests.ts",
+        "web/**/*.tests.ts"
+    ]
+}
