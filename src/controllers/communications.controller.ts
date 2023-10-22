@@ -1,8 +1,23 @@
 import spi from 'pi-spi';
 import { sleep } from "../utilities/common";
+import { DbResults } from '../types/dbresults';
+import { writeNewSensorResults } from '../dao/sqlite.dao';
+const sensorReadWait = 5;
 let transferOccuring: boolean = false;
 
 let conn: spi.SPI;
+
+let readTimeout: NodeJS.Timeout;
+
+export function setUpSensorRead(minutes: number) {
+    readTimeout = setTimeout(() => {
+        readSensorsAndWrite();
+    }, 1000 * 60 * minutes);
+};
+
+export function killSensorReads() {
+    clearTimeout(readTimeout);
+}
 
 function byteTransfer(tx: Buffer): Promise<Buffer> {
     return new Promise((res, rej) => {
@@ -13,7 +28,7 @@ function byteTransfer(tx: Buffer): Promise<Buffer> {
     })
 }
 
-export async function sendByteString(message: string): Promise<string> {
+async function sendByteString(message: string): Promise<string> {
     while (transferOccuring);
     conn = spi.initialize('/dev/spidev0.0');
     conn.clockSpeed(125000);
@@ -35,3 +50,15 @@ export async function sendByteString(message: string): Promise<string> {
     await sleep(1000);
     return newMessage;
 };
+
+async function readSensorsAndWrite(): Promise<void> {
+    try {
+        const data = await sendByteString('');
+        const parsed = JSON.parse(data) as [DbResults.adc];
+        await writeNewSensorResults(parsed[0].temperature, parsed[0].input_00);
+        setUpSensorRead(sensorReadWait)
+    } catch (err) {
+        console.error('Failure to read data from sensors and then write it: ', err);
+        setUpSensorRead(sensorReadWait);
+    }
+}

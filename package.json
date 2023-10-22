@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/jberks02/typescript-react-server-boilerplate#readme",
   "dependencies": {
+    "@types/pi-spi": "^0.0.30",
     "concurrently": "^7.0.0",
     "dotenv": "^16.0.0",
     "fastify": "^4.24.3",
