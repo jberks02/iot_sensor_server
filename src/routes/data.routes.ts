@@ -1,5 +1,5 @@
 import { RouteOptions } from "fastify/types/route";
-import { getCurrentData } from "../controllers/data.controller";
+import { getCurrentData, getDailyAverageByHour, getMonthsDailyAverage, getWeeksHourlyAverage } from "../controllers/data.controller";
 
 export const dataRoutes: RouteOptions[] = [
     {
@@ -10,6 +10,16 @@ export const dataRoutes: RouteOptions[] = [
     {
         method: 'GET',
         url: '/env/day',
-        handler: () => null
+        handler: getDailyAverageByHour
+    },
+    {
+        method: 'GET',
+        url: '/env/week',
+        handler: getWeeksHourlyAverage
+    },
+    {
+        method: 'GET',
+        url: '/env/month',
+        handler: getMonthsDailyAverage
     }
 ]
