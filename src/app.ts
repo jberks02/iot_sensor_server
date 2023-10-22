@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import { dataRoutes } from './routes/data.routes';
 import { initSqliteDb } from './dao/sqlite.dao';
+import { setUpSensorRead } from './controllers/communications.controller';
 
 const routes = [...dataRoutes]
 
@@ -22,5 +23,6 @@ export async function buildApp() {
         done();
     }, { prefix: 'api' })
     await initSqliteDb();
+    setUpSensorRead(1);
     return server;
 }
