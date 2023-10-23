@@ -1,5 +1,5 @@
 import { AsyncDatabase } from 'promised-sqlite3';
-import { getDateFromNDaysInPast } from '../utilities/common';
+import { getDateFromNDaysInPast, processNewData } from '../utilities/common';
 import { DbResults } from '../types/dbresults';
 const dbPath = './sensorData';
 
@@ -15,7 +15,8 @@ const sensoreDataDateSelect = `
 export async function initSqliteDb(): Promise<void> {
     const db = await AsyncDatabase.open(dbPath)
     try {
-        const data = await db.all('SELECT * FROM sensor_input LIMIT 10');
+        const data = await db.all('SELECT * FROM sensor_input LIMIT 10') as DbResults.sensorInputRow[];
+        processNewData(data)
         console.log(data);
     } catch (err) {
         console.log(err);
@@ -51,6 +52,7 @@ export async function readLatestRecord(): Promise<DbResults.sensorInputRow[]> {
             FROM sensor_input
             WHERE insert_datetime = (SELECT MAX(insert_datetime) from sensor_input)`
         const result = await db.all(query) as DbResults.sensorInputRow[];
+        processNewData(result);
         return result;
     } catch (err) {
         console.error('Reading most recent date failed: ', err);
@@ -66,6 +68,7 @@ export async function readDaysRecords(): Promise<DbResults.sensorInputRow[]> {
         const result = await db.all(sensoreDataDateSelect, {
             $midnight: now.toISOString()
         }) as DbResults.sensorInputRow[];
+        processNewData(result);
         return result;
     } catch (err) {
         console.error('Read for days records failed: ', err);
@@ -80,6 +83,7 @@ export async function readLastSevenDaysRecords(): Promise<DbResults.sensorInputR
         const result = await db.all(sensoreDataDateSelect, {
             $midnight: sevenDaysAgo.toISOString()
         }) as DbResults.sensorInputRow[];
+        processNewData(result);
         return result;
     } catch (err) {
         console.error('Failure to read Last seven days: ', err);
@@ -90,10 +94,11 @@ export async function readLastSevenDaysRecords(): Promise<DbResults.sensorInputR
 export async function readLastThirtyDaysRecords(): Promise<DbResults.sensorInputRow[]> {
     const db = await AsyncDatabase.open(dbPath);
     try {
-        const sevenDaysAgo = getDateFromNDaysInPast(30);
+        const monthAgo = getDateFromNDaysInPast(30);
         const result = await db.all(sensoreDataDateSelect, {
-            $midnight: sevenDaysAgo.toISOString()
+            $midnight: monthAgo.toISOString()
         }) as DbResults.sensorInputRow[];
+        processNewData(result);
         return result;
     } catch (err) {
         console.error('Failure to read Last seven days: ', err);

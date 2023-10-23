@@ -11,7 +11,7 @@ export function calculateAverage(list: number[]): number {
     const division = new SafeFloat(list.length);
     let total = new SafeFloat(0);
     for (const num of list) {
-        total.plus(num);
+        total = total.plus(num);
     };
     return total.div(division).toNumber();
 }
@@ -46,3 +46,9 @@ export function sleep(ms: number): Promise<void> {
         }, ms);
     })
 }
+
+export function processNewData(data: DbResults.sensorInputRow[]) {
+    for (let i = 0; i < data.length; i++) {
+        data[i].insert_datetime = new Date(data[i].insert_datetime);
+    };
+};
