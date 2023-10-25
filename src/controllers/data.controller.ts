@@ -2,9 +2,9 @@ import { readDaysRecords, readLastSevenDaysRecords, readLastThirtyDaysRecords, r
 import { DbResults } from "../types/dbresults";
 import { calculateHourlyAverage } from "../utilities/common";
 
-export async function getCurrentData(): Promise<DbResults.sensorInputRow> {
+export async function getCurrentData(): Promise<DbResults.sensorInputRow[]> {
     const data = await readLatestRecord()
-    return data[0];
+    return data;
 }
 
 export async function getDailyAverageByHour(): Promise<DbResults.sensorInputRow[]> {

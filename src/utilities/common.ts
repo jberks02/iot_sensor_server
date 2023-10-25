@@ -18,12 +18,12 @@ export function calculateAverage(list: number[]): number {
 
 export function calculateHourlyAverage(data: DbResults.sensorInputRow[], dayOrHour: 'day' | 'hour'): DbResults.sensorInputRow[] {
     const hourlyAverages: DbResults.sensorInputRow[] = [];
-    let previousHour: number = dayOrHour === 'hour' ? data[0].insert_datetime.getHours() : data[0].insert_datetime.getDate();
+    let previousHour: number = dayOrHour === 'hour' ? data[0].insert_datetime.getUTCHours() : data[0].insert_datetime.getUTCDate();
     let readingsForHour: DbResults.sensorInputRow[] = [];
     for (const read of data) {
         if (
-            (dayOrHour === 'hour' && read.insert_datetime.getHours() !== previousHour && readingsForHour.length > 0) ||
-            (dayOrHour === 'day' && read.insert_datetime.getDate() !== previousHour && readingsForHour.length > 0)
+            (dayOrHour === 'hour' && read.insert_datetime.getUTCHours() !== previousHour && readingsForHour.length > 0) ||
+            (dayOrHour === 'day' && read.insert_datetime.getUTCDate() !== previousHour && readingsForHour.length > 0)
         ) {
             const averageTemp = calculateAverage(readingsForHour.map((x) => x.temperature));
             const averageDamp = calculateAverage(readingsForHour.map((x) => x.damp));
@@ -32,6 +32,7 @@ export function calculateHourlyAverage(data: DbResults.sensorInputRow[], dayOrHo
                 damp: averageDamp,
                 insert_datetime: readingsForHour[0].insert_datetime
             });
+            previousHour = dayOrHour === 'hour' ? read.insert_datetime.getUTCHours() : read.insert_datetime.getUTCDate()
             readingsForHour = [read];
         }
         readingsForHour.push(read);
