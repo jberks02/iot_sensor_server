@@ -10,7 +10,9 @@
     "dev": "run-p build-watch run-watch",
     "clean": "rimraf target",
     "build": "tsc",
-    "postbuild": "copyfiles -E package.json package-lock.json target"
+    "postbuild": "run-p copy:packages copy:webpage",
+    "copy:packages": "copyfiles -E package.json package-lock.json target",
+    "copy:webpage": "copyfiles -u 1 public/** target/public"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
   },
   "homepage": "https://github.com/jberks02/typescript-react-server-boilerplate#readme",
   "dependencies": {
+    "@fastify/cors": "^8.4.0",
     "@types/pi-spi": "^0.0.30",
     "concurrently": "^7.0.0",
     "dotenv": "^16.0.0",
