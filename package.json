@@ -12,7 +12,7 @@
     "build": "tsc",
     "postbuild": "run-p copy:packages copy:webpage",
     "copy:packages": "copyfiles -E package.json package-lock.json target",
-    "copy:webpage": "copyfiles -u 1 public/** target/public"
+    "copy:webpage": "copyfiles -u 1 dist/** target/dist"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/jberks02/typescript-react-server-boilerplate#readme",
   "dependencies": {
     "@fastify/cors": "^8.4.0",
+    "@fastify/static": "^6.11.2",
     "@types/pi-spi": "^0.0.30",
     "concurrently": "^7.0.0",
     "dotenv": "^16.0.0",

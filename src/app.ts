@@ -2,7 +2,9 @@ import fastify from 'fastify';
 import { dataRoutes } from './routes/data.routes';
 import { initSqliteDb } from './dao/sqlite.dao';
 import { setUpSensorRead } from './controllers/communications.controller';
-import cors from '@fastify/cors'
+import cors from '@fastify/cors';
+import fastStatic from '@fastify/static';
+const path = require('node:path')
 
 const routes = [...dataRoutes]
 
@@ -18,10 +20,10 @@ export async function buildApp() {
         methods: ['GET'],
         preflightContinue: true
     })
-    server.route({
-        method: 'GET',
-        url: '/',
-        handler: () => ({ message: 'hello world' })
+    server.register(fastStatic, {
+        root: path.join(__dirname, 'dist'),
+        prefix: '/',
+        decorateReply: false
     })
     await server.register((app, _, done) => {
         for (const route of routes) {
