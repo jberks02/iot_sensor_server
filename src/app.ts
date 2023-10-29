@@ -14,6 +14,7 @@ export async function buildApp() {
             level: 'info'
         }
     });
+
     server.register(cors, {
         origin: true,
         allowedHeaders: ['Content-Type', 'Authorization'],
