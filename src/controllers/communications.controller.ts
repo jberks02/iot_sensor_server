@@ -54,8 +54,8 @@ async function sendByteString(message: string): Promise<string> {
 async function readSensorsAndWrite(): Promise<void> {
     try {
         const data = await sendByteString('');
-        const parsed = JSON.parse(data) as [DbResults.adc];
-        await writeNewSensorResults(parsed[0].temperature, parsed[0].input_00);
+        const parsed = JSON.parse(data) as DbResults.adc;
+        await writeNewSensorResults(parsed.temperature, parsed.input_00);
         setUpSensorRead(sensorReadWait)
     } catch (err) {
         console.error('Failure to read data from sensors and then write it: ', err);
